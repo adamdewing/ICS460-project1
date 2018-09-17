@@ -1,5 +1,4 @@
 package com.metrostate.ics460.project1.sender;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -13,19 +12,19 @@ public class FileLoader {
 	private FileReader fileReader;
 
 	public void loadFile() {
-	String fileName;
+		String fileName;
 		file_Chooser = new JFileChooser();
 		file_Chooser.setCurrentDirectory(new File("."));
 		if (file_Chooser.showOpenDialog(null)== JFileChooser.APPROVE_OPTION) {
-			
+
 			try {
-				 fileName = file_Chooser.getSelectedFile().getName();
+				fileName = file_Chooser.getSelectedFile().getName();
 				fileReader = new FileReader(fileName);
 				bufferedReader = new BufferedReader(fileReader);
 				String line;
-				
+
 				while ((line = bufferedReader.readLine()) != null) {
-				System.out.println(fileName);
+					System.out.println(fileName);
 					System.out.println(line);
 				}
 			} catch (IOException e) {
