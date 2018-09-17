@@ -1,4 +1,5 @@
 package com.metrostate.ics460.project1.sender;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -10,8 +11,9 @@ public class FileLoader {
 	private JFileChooser file_Chooser;
 	private BufferedReader bufferedReader;
 	private FileReader fileReader;
-
-	public void loadFile() {
+	private byte[] sendData;
+    
+	public byte[] loadFile() {
 		String fileName;
 		file_Chooser = new JFileChooser();
 		file_Chooser.setCurrentDirectory(new File("."));
@@ -24,8 +26,7 @@ public class FileLoader {
 				String line;
 
 				while ((line = bufferedReader.readLine()) != null) {
-					System.out.println(fileName);
-					System.out.println(line);
+					sendData = line.getBytes("US-ASCII");
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -33,6 +34,9 @@ public class FileLoader {
 		}else {
 			System.out.println("oops ... File not exist");
 		}
+		
+		return sendData;
 	}
 
 }
+
