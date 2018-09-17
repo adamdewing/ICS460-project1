@@ -6,10 +6,14 @@ package com.metrostate.ics460.project1.receiver;
 import static com.metrostate.ics460.project1.Constants.PORT;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
@@ -71,7 +75,7 @@ public class UDPDataReceiver implements DataReceiver {
 					e.printStackTrace();
 				}
 			} while (!isConversationComplete(uuid));
-			sendConversationACK(uuid, socket);
+			sendConversationACK(uuid, socket, datagramPacket.getSocketAddress());
 
 		} catch (SocketException e) {
 			System.err.println("Could not create an UDP socket on PORT " + PORT);
@@ -103,6 +107,8 @@ public class UDPDataReceiver implements DataReceiver {
 			Message message = (Message) input.readObject();
 
 			if (!isValidMessage(message)) {
+				System.out.println("The following invalid message was received:");
+				System.out.println(message);
 				throw new IOException("Invalid Message object received.");
 			}
 
@@ -117,6 +123,8 @@ public class UDPDataReceiver implements DataReceiver {
 			}
 
 			if (message != null && message.getMessageType() == MessageType.DATA) {
+				System.out.println("Received the following message:");
+				System.out.println(message);
 				messages.put(message.getSequence(), message);
 				timeouts.put(uuid, 0); // reset timeouts for this conversation
 			} else {
@@ -150,7 +158,7 @@ public class UDPDataReceiver implements DataReceiver {
 		Message someMessage = messages.entrySet().iterator().next().getValue();
 
 		// Have we received all the messages for this conversation?
-		if (someMessage.getSize() == messages.size()) {
+		if (someMessage.getSize() != messages.size()) {
 			return false;
 		}
 
@@ -175,14 +183,27 @@ public class UDPDataReceiver implements DataReceiver {
 	private boolean isValidMessage(Message message) {
 		if (message.getConversationUuid() == null) {
 			return false;
-		} else if (message.getMessageType() != null) {
+		} else if (message.getMessageType() == null) {
 			return false;
 		}
 		return true;
 	}
 
-	private void sendConversationACK(UUID uuid, DatagramSocket socket) {
-		// TODO
+	private void sendConversationACK(UUID uuid, DatagramSocket socket, SocketAddress socketAddress) {
+		Map<Integer, Message> messages = conversations.get(uuid);
+		Message requestMessage = messages.entrySet().iterator().next().getValue();
+		
+		Message ackMessage = new Message();
+		ackMessage.setConversationUuid(requestMessage.getConversationUuid());
+		ackMessage.setMessageType(MessageType.ACK);
+		byte[] bytes = convertObjectToBytes(ackMessage);
+		DatagramPacket packet = new DatagramPacket(bytes, bytes.length, socketAddress);
+		try {
+			socket.send(packet);
+		} catch (IOException e) {
+			System.err.println("Error sending back ACK message for conversation " + uuid);
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -208,10 +229,33 @@ public class UDPDataReceiver implements DataReceiver {
 
 		byte[] bytes = new byte[totalLength];
 		int currentPosition = 0;
+		System.out.println("totalLength: " + totalLength);
 		for (int i = 0; i < someMessage.getSize(); i++) {
 			Message message = messages.get(i);
-			System.arraycopy(messages.get(i), 0, bytes, currentPosition, messages.get(i).getData().length);
+			System.out.println("Adding the following bytes:" + message.getData());
+			System.arraycopy(message.getData(), 0, bytes, currentPosition, message.getData().length);
 			currentPosition += messages.get(i).getData().length;
+		}
+		return bytes;
+	}
+	
+	private byte[] convertObjectToBytes(Object obj) {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		byte[] bytes = null;
+		try {
+			ObjectOutput out = new ObjectOutputStream(output);
+			out.writeObject(obj);
+			out.flush();
+			bytes = output.toByteArray();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				output.close();
+			} catch (IOException e) {
+				//Do nothing
+			}
 		}
 		return bytes;
 	}
