@@ -3,7 +3,7 @@ package com.metrostate.ics460.project1.receiver;
 public class Receiver {
 
 	private DataReceiver dataReceiver = new UDPDataReceiver();
-	private FileSaver fileSaver = null;
+	private FileSaver fileSaver = new FileSaver();
 	
 	public static void main(String[] args) {
 		Receiver receiver = new Receiver();
@@ -13,7 +13,7 @@ public class Receiver {
 
 	public void receiveFile() {
 		byte[] bytes = dataReceiver.receiveData();
-		fileSaver.saveFile(bytes);
+//		fileSaver.saveFile(bytes);
 	}
 	
 }
