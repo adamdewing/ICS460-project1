@@ -24,6 +24,7 @@ import com.metrostate.ics460.project1.Message;
 import com.metrostate.ics460.project1.MessageType;
 
 /**
+ * Class to receive UDP data
  * @author adamv
  *
  */
