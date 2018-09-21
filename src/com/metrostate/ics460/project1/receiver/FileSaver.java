@@ -1,6 +1,5 @@
 package com.metrostate.ics460.project1.receiver;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,6 +33,6 @@ public class FileSaver implements FileProcessor {
 			e.printStackTrace();
 		}
 	}
-}
+   }
 
 }
