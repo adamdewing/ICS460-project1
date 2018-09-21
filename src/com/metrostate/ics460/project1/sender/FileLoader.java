@@ -1,5 +1,4 @@
 package com.metrostate.ics460.project1.sender;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -44,3 +43,19 @@ public class FileLoader implements FileProcessor {
 		return lines;
 
 	}
+
+	/**
+	 * @return the lines
+	 */
+	public List<byte[]> getLines() {
+		return lines;
+	}
+
+	/**
+	 * @param line the lines to set
+	 */
+	public void setLines(List<byte[]> line) {
+		this.lines = line;
+	}
+
+}
