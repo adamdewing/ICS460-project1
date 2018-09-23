@@ -2,18 +2,15 @@ package com.metrostate.ics460.project1.sender;
 
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFileChooser;
 
-public class FileLoader implements FileProcessor {
+public class FileLoader {
 
 	private String fileName;
 	private String line;
