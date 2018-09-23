@@ -1,5 +1,7 @@
 package com.metrostate.ics460.project1.receiver;
 
+import java.util.List;
+
 public class Receiver {
 
 	private DataReceiver dataReceiver = new UDPDataReceiver();
@@ -12,8 +14,8 @@ public class Receiver {
 	}
 
 	public void receiveFile() {
-		byte[] bytes = dataReceiver.receiveData();
-//		fileSaver.saveFile(bytes);
+		List<byte[]> byteList = dataReceiver.receiveData();
+		fileSaver.saveFile(byteList);
 	}
 	
 }

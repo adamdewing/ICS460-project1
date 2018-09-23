@@ -14,18 +14,16 @@ public class FileSaver implements FileProcessor {
 
 	private List<byte[]> lines = new ArrayList<byte[]>();
 
-	public void saveFile(String data) {
+	public void saveFile(List<byte[]> byteList) {
 		File file = new File("output.txt");
-
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(data);
-
 		FileWriter fileWriter;
 		try {
 			fileWriter = new FileWriter(file, true);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			PrintWriter printWriter = new PrintWriter(bufferedWriter);
-			printWriter.println(stringBuilder.toString());
+			for(byte[] bytes : byteList) {
+				printWriter.println(new String(bytes, "UTF-8"));
+			}
 			printWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -2,7 +2,7 @@ package com.metrostate.ics460.project1;
 
 public final class Constants {
 
-	public static final int PORT = 13;
+	public static final int PORT = 11;
 	
 	private Constants() {
 		//restrict instantiation

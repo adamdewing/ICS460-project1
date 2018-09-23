@@ -4,9 +4,11 @@
 package com.metrostate.ics460.project1.receiver;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,32 +20,86 @@ import com.metrostate.ics460.project1.Constants;
  */
 public class UDPDataReceiver implements DataReceiver {
 
+	public static final int TIMEOUT_INITIAL = 30000;
+	public static final int TIMEOUT_RECEIVING = 3000;
+
 	@Override
-	public byte[] receiveData() {
-		List<byte []> byteList = new ArrayList<>();
+	public List<byte[]> receiveData() {
+		List<byte[]> byteList = new ArrayList<>();
 		DatagramSocket socket = null;
 		try {
 			socket = new DatagramSocket(Constants.PORT);
-			while(true) {
+			socket.setSoTimeout(TIMEOUT_INITIAL);
+			boolean isTimeoutLowered = false;
+			int packetNumber = 0;
+			while (true) {
 				DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
 				socket.receive(packet);
-				byteList.add(packet.getData());
+				packetNumber++;
+				if (!isTimeoutLowered) {
+					// Once we receive the first packet of data, we shouldn't have to wait long for
+					// the next ones.
+					socket.setSoTimeout(TIMEOUT_RECEIVING);
+					isTimeoutLowered = true;
+				}
+
+				logPacket(packet, packetNumber);
+				byte[] bytes = new byte[packet.getLength()];
+				System.arraycopy(packet.getData(), 0, bytes, 0, packet.getLength());
+				byteList.add(bytes);
 			}
-		} catch(SocketException e) {
+		} catch (SocketException e) {
 			System.out.println("Error creating socket on port " + Constants.PORT);
 			e.printStackTrace();
+		} catch (SocketTimeoutException e) {
+			if (byteList.isEmpty()) {
+				System.err.println("Socket timed out and there was no data received!");
+			} else {
+				System.out.println(
+						"Socket timed out.  This might be due to the fact that the sender might be done sending data.");
+			}
 		} catch (IOException e) {
 			System.out.println("Error trying to receive data.");
 			e.printStackTrace();
-		}finally {
-			if(socket != null && !socket.isClosed()) {
+		} finally {
+			if (socket != null && !socket.isClosed()) {
 				socket.close();
 			}
 		}
-			
-		return mergeBytes(byteList);
+		System.out.println("Total number of packets received: " + byteList.size());
+		return byteList;
 	}
-	
+
+	/**
+	 * Logs information about the packet received.
+	 * @param packet
+	 * @param packetNumber
+	 */
+	private void logPacket(DatagramPacket packet, int packetNumber) {
+		System.out.println("*************************************************");
+		System.out.println(" The receiver has received the following text:\n");
+		try {
+			System.out.println(new String(packet.getData(), "US-ASCII"));
+		} catch (UnsupportedEncodingException e) {
+			System.err.println("Could not convert packet number " + packetNumber + " from a byte array to a String.");
+			e.printStackTrace();
+		}
+		System.out.println(" This is packet number : " + packetNumber);
+		System.out.println(" This packet has " + packet.getLength() + " bytes of data.");
+		System.out.println(" The Start byte is:" + " " + packet.getData()[0]);
+		System.out.println(" The end byte is:" + " " + packet.getData()[packet.getLength()]);
+		System.out.println("*************************************************");
+		System.out.println();
+	}
+
+	/**
+	 * This method takes a List of byte arrays and merges them into a single byte
+	 * array. This method is no longer used.
+	 * 
+	 * @param byteList
+	 * @return
+	 */
+	@SuppressWarnings("unused")
 	private byte[] mergeBytes(List<byte[]> byteList) {
 		// Find the total length of all the data combined
 		int totalLength = 0;
@@ -53,9 +109,7 @@ public class UDPDataReceiver implements DataReceiver {
 
 		byte[] bytes = new byte[totalLength];
 		int currentPosition = 0;
-		System.out.println("totalLength: " + totalLength);
 		for (int i = 0; i < byteList.size(); i++) {
-			System.out.println("Adding the following bytes:" +byteList.get(i));
 			System.arraycopy(byteList.get(i), 0, bytes, currentPosition, byteList.get(i).length);
 			currentPosition += byteList.get(i).length;
 		}

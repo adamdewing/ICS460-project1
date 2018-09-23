@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.swing.JFileChooser;
 
-public class FileLoader {
+public class FileLoader implements Loader{
 
 	private String fileName;
 	private String line;
