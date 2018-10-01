@@ -26,8 +26,11 @@ public interface FileProcessor {
 	
 	/**
 	 * A public method save a file to a disk
-	 * @param data
+	 * @param a string data
 	 */
 	public void fileSaver(String data);
 
 }
+
+
+
