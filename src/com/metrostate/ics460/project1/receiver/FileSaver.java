@@ -47,8 +47,15 @@ public class FileSaver implements FileProcessor {
 	}
 
 	@Override
-	public List<byte[]> loadFile() {
+	public List<byte[]> fileLoader() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void fileSaver(List<byte[]> byteList) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
