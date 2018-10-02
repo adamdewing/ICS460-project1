@@ -20,15 +20,15 @@ public interface FileProcessor {
 	
 	/**
 	 * A public method read a file from a disk
-	 * @return A list of byte array
+	 * @return a list of byte array
 	 */
 	public List<byte[]> fileLoader();
 	
 	/**
 	 * A public method save a file to a disk
-	 * @param a string data
+	 * @param a list of byte array
 	 */
-	public void fileSaver(String data);
+	public void fileSaver(List<byte[]> byteList);
 
 }
 
