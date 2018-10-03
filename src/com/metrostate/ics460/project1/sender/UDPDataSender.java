@@ -31,11 +31,8 @@ public class UDPDataSender implements DataSender {
 				byte startByte = bytes[0];
 				byte endByte = bytes[bytes.length - 1];
 
-				String input = new String(sending.getData(), 0, sending.getLength(), "US-ASCII");
 //For each Datagram sent the sender will write the text sent, packer #, startbyte and endbyte.
 				System.out.println("*************************************************");
-				System.out.println(" The sender is sending the following text\n"
-						+ "----------------------------------------------\n " + input);
 				System.out.println(" The number of packet sending is:" + byteList.size());
 				System.out.println(" This is  packet number : " + pukNum);
 				System.out.println(" The Start byte is:" + " " + startByte);

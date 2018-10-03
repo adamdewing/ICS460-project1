@@ -24,7 +24,7 @@ public class UDPDataReceiver implements DataReceiver {
 	public static final int TIMEOUT_RECEIVING = 3000;
 
 	@Override
-	public List<byte[]> receiveData() {
+	public byte[] receiveData() {
 		List<byte[]> byteList = new ArrayList<>();
 		DatagramSocket socket = null;
 		try {
@@ -67,7 +67,7 @@ public class UDPDataReceiver implements DataReceiver {
 			}
 		}
 		System.out.println("Total number of packets received: " + byteList.size());
-		return byteList;
+		return mergeBytes(byteList);
 	}
 
 	/**

@@ -53,68 +53,68 @@ class UDPDataReceiverTest {
 
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.metrostate.ics460.project1.receiver.UDPDataReceiver#receiveData()}.
-	 */
-	@Test
-	void testReceiveDataHappyPathString() {
-		String[] data = {"123456"};
-		
-		// Start sending test data
-		senderThread = createTestDataSender(data);
-		senderThread.start();
-		
-		// Receive test data
-		List<byte[]> byteList = dataReceiver.receiveData();
-		
-		String receivedData = null;
-		for(byte[] bytes : byteList) {
-			try {
-					
-				receivedData = new String(bytes, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				assertTrue(false, "Could not encode receiving data from bytes back to a String.");
-			}
-			assertTrue(bytes != null, "UDPDataReceiver did not receive any data.");
-			assertTrue(data[0].equals(receivedData), "Was expecting " + data[0] + ", but received the String " + receivedData + " intead.");
-		}
-	}
+//	/**
+//	 * Test method for
+//	 * {@link com.metrostate.ics460.project1.receiver.UDPDataReceiver#receiveData()}.
+//	 */
+//	@Test
+//	void testReceiveDataHappyPathString() {
+//		String[] data = {"123456"};
+//		
+//		// Start sending test data
+//		senderThread = createTestDataSender(data);
+//		senderThread.start();
+//		
+//		// Receive test data
+//		List<byte[]> byteList = dataReceiver.receiveData();
+//		
+//		String receivedData = null;
+//		for(byte[] bytes : byteList) {
+//			try {
+//					
+//				receivedData = new String(bytes, "UTF-8");
+//			} catch (UnsupportedEncodingException e) {
+//				e.printStackTrace();
+//				assertTrue(false, "Could not encode receiving data from bytes back to a String.");
+//			}
+//			assertTrue(bytes != null, "UDPDataReceiver did not receive any data.");
+//			assertTrue(data[0].equals(receivedData), "Was expecting " + data[0] + ", but received the String " + receivedData + " intead.");
+//		}
+//	}
 
-	/**
-	 * Test method for
-	 * {@link com.metrostate.ics460.project1.receiver.UDPDataReceiver#receiveData()}.
-	 */
-	@Test
-	void testReceiveDataHappyPathMultipleStrings() {
-		String[] data = {"123456", "7", "", "8", "9", "0"};
-		
-		Map<String, String> dataMap = new HashMap<>();
-		for(String value : data) {
-			dataMap.put(value, null);
-		}
-		
-		// Start sending test data
-		senderThread = createTestDataSender(data);
-		senderThread.start();
-		
-		// Receive test data
-		List<byte[]> byteList = dataReceiver.receiveData();
-		
-		String receivedData = null;
-		for(byte[] bytes : byteList) {
-			try {
-					
-				receivedData = new String(bytes, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				assertTrue(false, "Could not encode receiving data from bytes back to a String.");
-			}
-			assertTrue(bytes != null, "UDPDataReceiver did not receive any data.");
-			assertTrue(dataMap.containsKey(receivedData), "The value " + receivedData + " was received, but was not part of the test data sent.");
-		}
-	}
+//	/**
+//	 * Test method for
+//	 * {@link com.metrostate.ics460.project1.receiver.UDPDataReceiver#receiveData()}.
+//	 */
+//	@Test
+//	void testReceiveDataHappyPathMultipleStrings() {
+//		String[] data = {"123456", "7", "", "8", "9", "0"};
+//		
+//		Map<String, String> dataMap = new HashMap<>();
+//		for(String value : data) {
+//			dataMap.put(value, null);
+//		}
+//		
+//		// Start sending test data
+//		senderThread = createTestDataSender(data);
+//		senderThread.start();
+//		
+//		// Receive test data
+//		List<byte[]> byteList = dataReceiver.receiveData();
+//		
+//		String receivedData = null;
+//		for(byte[] bytes : byteList) {
+//			try {
+//					
+//				receivedData = new String(bytes, "UTF-8");
+//			} catch (UnsupportedEncodingException e) {
+//				e.printStackTrace();
+//				assertTrue(false, "Could not encode receiving data from bytes back to a String.");
+//			}
+//			assertTrue(bytes != null, "UDPDataReceiver did not receive any data.");
+//			assertTrue(dataMap.containsKey(receivedData), "The value " + receivedData + " was received, but was not part of the test data sent.");
+//		}
+//	}
 
 	private Thread createTestDataSender(String[] data) {
 		return new Thread(new Runnable() {
