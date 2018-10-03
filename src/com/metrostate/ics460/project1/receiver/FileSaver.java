@@ -26,12 +26,12 @@ public class FileSaver implements FileProcessor {
 	/**
 	* A method save a file onto a disk it takes a list of byte aarys as an argument
 	*/
-	public void saveFile(byte[] byteList) {
+	public void saveFile(byte[] bytes) {
 		File file = new File("output");
 		FileOutputStream fis = null;
 		try {
 			fis = new FileOutputStream(file);
-			fis.write(byteList);
+			fis.write(bytes);
 			
 			
 		} catch (IOException e) {

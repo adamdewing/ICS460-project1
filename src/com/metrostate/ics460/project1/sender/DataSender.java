@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface DataSender {
 
-	public void sendData(List<byte[]> bytes);
+	public void sendData(byte[] bytes);
 }
