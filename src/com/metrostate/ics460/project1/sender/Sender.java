@@ -17,8 +17,8 @@ public class Sender {
     }
     
     public void start() {
-    	List<byte[]> byteList = loader.loadFile();
-    	dataSender.sendData(byteList);
+    	byte[] bytes = loader.loadFile();
+    	dataSender.sendData(bytes);
     }
 }
 
