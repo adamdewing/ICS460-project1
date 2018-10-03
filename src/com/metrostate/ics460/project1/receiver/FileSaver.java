@@ -28,21 +28,23 @@ public class FileSaver implements FileProcessor {
 	/**
 	* A method save a file onto a disk it takes a list of byte aarys as an argument
 	*/
-	public void saveFile(List<byte[]> byteList) {
-		File file = new File("output.txt");
-		FileWriter fileWriter;
+	public void saveFile(byte[] byteList) {
+		File file = new File("output");
+		FileOutputStream fis = null;
 		try {
-			fileWriter = new FileWriter(file, true);
-			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			PrintWriter printWriter = new PrintWriter(bufferedWriter);
-			for(byte[] bytes : byteList) {
-				printWriter.println(new String(bytes, "UTF-8"));
-			}
+			fis = new FileOutputStream(file);
+			fis.write(byteList);
 			
-			printWriter.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				fis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
