@@ -76,20 +76,7 @@ public class UDPDataReceiver implements DataReceiver {
 	 * @param packetNumber
 	 */
 	private void logPacket(DatagramPacket packet, int packetNumber) {
-		System.out.println("*************************************************");
-		System.out.println(" The receiver has received the following text:\n");
-		try {
-			System.out.println(new String(packet.getData(), "US-ASCII"));
-		} catch (UnsupportedEncodingException e) {
-			System.err.println("Could not convert packet number " + packetNumber + " from a byte array to a String.");
-			e.printStackTrace();
-		}
-		System.out.println(" This is packet number : " + packetNumber);
-		System.out.println(" This packet has " + packet.getLength() + " bytes of data.");
-		System.out.println(" The Start byte is:" + " " + packet.getData()[0]);
-		System.out.println(" The end byte is:" + " " + packet.getData()[packet.getLength()]);
-		System.out.println("*************************************************");
-		System.out.println();
+		//TODO need to redo
 	}
 
 	/**

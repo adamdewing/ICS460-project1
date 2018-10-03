@@ -12,8 +12,8 @@ public class Receiver {
 	}
 
 	public void receiveFile() {
-		byte[] byteList = dataReceiver.receiveData();
-		fileSaver.saveFile(byteList);
+		byte[] bytes = dataReceiver.receiveData();
+		fileSaver.saveFile(bytes);
 	}
 	
 }
