@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.metrostate.ics460.project1.FileProcessor;
-
 /**
  * Course: 		ICS 460 Networks And Security
  * Project Description: A project uses UDP protocol to send and a receive a binary file.
@@ -19,7 +17,7 @@ import com.metrostate.ics460.project1.FileProcessor;
  * @author Natnael Alemayehu
  *
  */
-public class FileSaver implements FileProcessor {
+public class FileSaver implements Saver {
 
 	private List<byte[]> lines = new ArrayList<byte[]>();
 
@@ -46,16 +44,5 @@ public class FileSaver implements FileProcessor {
 		}
 	}
 
-	@Override
-	public List<byte[]> fileLoader() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void fileSaver(List<byte[]> byteList) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 }

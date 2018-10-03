@@ -1,4 +1,4 @@
-package com.metrostate.ics460.project1;
+package com.metrostate.ics460.project1.receiver;
 
 import java.util.List;
 
@@ -16,19 +16,13 @@ import java.util.List;
 /**
  * An interface to read and save a file onto disk *
  */
-public interface FileProcessor {
-	
-	/**
-	 * A public method read a file from a disk
-	 * @return a list of byte array
-	 */
-	public List<byte[]> fileLoader();
+public interface Saver {
 	
 	/**
 	 * A public method save a file to a disk
 	 * @param a list of byte array
 	 */
-	public void fileSaver(List<byte[]> byteList);
+	public void saveFile(byte[] bytes);
 
 }
 
