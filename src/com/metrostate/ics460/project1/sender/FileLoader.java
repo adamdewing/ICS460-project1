@@ -23,17 +23,21 @@ public class FileLoader implements Loader{
 			fileName = file_Chooser.getSelectedFile().getName();
 
 			try {
-				FileReader fileReader = new FileReader(new File(fileName));
-				BufferedReader bufferedReader = new BufferedReader(fileReader);
+				FileInputStream fis = new FileInputStream((new File(fileName)));
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				byte[] buf = new byte[1024];
+				try {
 
+					for (int readNum; (readNum = fis.read(buf)) != -1;) {
+						//Writes to this byte array output stream
+						bos.write(buf, 0, readNum); 
+						System.out.println("read " + readNum + " bytes,");
+					}
+				} catch (IOException ex) {
 
-				while ((line = bufferedReader.readLine()) != null) {
-					//convert the String input into the byte array.
-					lines.add(line.getBytes("US-ASCII"));
-					//setLines(line.getBytes("US-ASCII"));	
 				}
 
-				fileReader.close();
+				fis.close();
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -42,6 +46,7 @@ public class FileLoader implements Loader{
 		return lines;
 
 	}
+
 
 	/**
 	 * @return the lines
