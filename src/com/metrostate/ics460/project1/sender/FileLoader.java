@@ -12,8 +12,6 @@ import javax.swing.JFileChooser;
 public class FileLoader implements Loader {
 
 	private String fileName;
-	private String line;
-	private List<byte[]> lines = new ArrayList<byte[]>();
 
 	public byte[] loadFile() {
 		JFileChooser file_Chooser = new JFileChooser();
@@ -35,21 +33,6 @@ public class FileLoader implements Loader {
 			
 		}
 		return buffer;
-	}
-
-	/**
-	 * @return the lines
-	 */
-	public List<byte[]> getLines() {
-		return lines;
-	}
-
-	/**
-	 * @param line
-	 *            the lines to set
-	 */
-	public void setLines(List<byte[]> line) {
-		this.lines = line;
 	}
 
 }
