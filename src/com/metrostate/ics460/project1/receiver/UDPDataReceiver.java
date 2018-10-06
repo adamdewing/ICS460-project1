@@ -31,19 +31,21 @@ public class UDPDataReceiver implements DataReceiver {
 			socket = new DatagramSocket(Constants.PORT);
 			socket.setSoTimeout(TIMEOUT_INITIAL);
 			boolean isTimeoutLowered = false;
-			int packetNumber = 0;
+			int packetsReceived = 0;
+			int bytesReceived = 0;
 			while (true) {
-				DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
+				DatagramPacket packet = new DatagramPacket(new byte[Constants.PACKET_SIZE], Constants.PACKET_SIZE);
 				socket.receive(packet);
-				packetNumber++;
 				if (!isTimeoutLowered) {
 					// Once we receive the first packet of data, we shouldn't have to wait long for
 					// the next ones.
 					socket.setSoTimeout(TIMEOUT_RECEIVING);
 					isTimeoutLowered = true;
 				}
-
-				logPacket(packet, packetNumber);
+				packetsReceived++;
+				System.out.println("Receiving packet number: " + packetsReceived + ", bytes: " + bytesReceived + " - " + (bytesReceived + packet.getLength() - 1));
+				bytesReceived += packet.getLength();
+				
 				byte[] bytes = new byte[packet.getLength()];
 				System.arraycopy(packet.getData(), 0, bytes, 0, packet.getLength());
 				byteList.add(bytes);
@@ -68,15 +70,6 @@ public class UDPDataReceiver implements DataReceiver {
 		}
 		System.out.println("Total number of packets received: " + byteList.size());
 		return mergeBytes(byteList);
-	}
-
-	/**
-	 * Logs information about the packet received.
-	 * @param packet
-	 * @param packetNumber
-	 */
-	private void logPacket(DatagramPacket packet, int packetNumber) {
-		//TODO need to redo
 	}
 
 	/**

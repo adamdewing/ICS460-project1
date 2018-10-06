@@ -4,47 +4,47 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.metrostate.ics460.project1.Constants;
 
 public class UDPDataSender implements DataSender {
 	
     private static final String HOSTNAME ="127.0.0.1";
-    private  static int pukNum=0;
 	
     @Override
 	public void sendData(byte[] bytes) {
-		try (DatagramSocket socket = new DatagramSocket(0)) {
-
+    	List<byte[]> byteList = splitBytes(bytes);
+    	try (DatagramSocket socket = new DatagramSocket(0)) {
 			socket.setSoTimeout(10000);
 			InetAddress host = InetAddress.getByName(HOSTNAME);
 			
-			List<byte[]> byteList = splitBytes(bytes);
 			
+			int packetsSent = 0;
+			int bytesSent = 0;
 			for(byte[] packetBytes : byteList){
 				DatagramPacket sending = new DatagramPacket(packetBytes, packetBytes.length, host, Constants.PORT);
 				socket.send(sending);
-				pukNum++;
-				if(packetBytes == null || packetBytes.length <= 0) {
-					System.out.println("Packet number " + pukNum + " contains no data.");
-					continue;
-				}
-				byte startByte = packetBytes[0];
-				byte endByte = packetBytes[packetBytes.length - 1];
-
-				//TODO output to log
-
+				packetsSent++;
+				System.out.println("Sending packet number: " + packetsSent + ", bytes: " + bytesSent + " - " + (bytesSent + packetBytes.length - 1));
+				bytesSent += packetBytes.length;
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-
+    	System.out.println("Total number of packets received: " + byteList.size());
 	}
     
     private List<byte[]> splitBytes(byte[] bytes){
-    	//TODO magic
-    	return null;
+    	List<byte[]> byteList = new ArrayList<byte[]>();
+    	for(int i = 0; i < bytes.length; i += Constants.PACKET_SIZE) {
+    		byte[] b = Arrays.copyOfRange(bytes, i, i + Constants.PACKET_SIZE); 		
+    		byteList.add(b);
+    	}
+    	return byteList;
     }
 
 }
